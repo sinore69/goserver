@@ -1,14 +1,13 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
-)
+import "github.com/gofiber/fiber/v2"
 
 func main() {
-	fmt.Println("server is running...")
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("hello world"))
-	})
-	http.ListenAndServe(":3000", nil)
+    app := fiber.New()
+
+    app.Get("/", func(c *fiber.Ctx) error {
+        return c.SendString("Hello, World!")
+    })
+
+    app.Listen("127.0.0.1:3000")
 }
