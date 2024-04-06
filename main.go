@@ -8,8 +8,9 @@ import (
 )
 
 type info struct {
-	Name  string `json:"name"`
-	Shift int    `json:"shift"`
+	Name  string 
+	Shift int    
+	Pwd string
 }
 
 func main() {
