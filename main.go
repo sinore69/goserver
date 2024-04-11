@@ -7,7 +7,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,7 +21,6 @@ type joke struct{
 
 func main() {
 	app := fiber.New()
-
 	app.Get("/name", name)
 	app.Post("/api", post)
 	app.Get("/jokes", jokes)
@@ -37,6 +35,7 @@ func jokes(c *fiber.Ctx) error {
 	if err!=nil{
 		log.Fatal("crash")
 	}
+	defer res.Body.Close()
 	body,err:=io.ReadAll(res.Body)
 	if err!=nil{
 		log.Fatal("crash")
@@ -48,6 +47,7 @@ func jokes(c *fiber.Ctx) error {
 	}
 	return c.SendString(data.Value)
 }
+
 func post(c *fiber.Ctx) error {
 	data := new(info)
 	if err := c.BodyParser(data); err != nil {
