@@ -1,5 +1,11 @@
 package cryptography
 
-func Decrypt(text string, shift int) string {
-    return Encrypt(text, 26-shift)
+import "encoding/base64"
+
+func Decode(encoded string) (string, error) {
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		return "", err
+	}
+	return string(decoded), nil
 }
