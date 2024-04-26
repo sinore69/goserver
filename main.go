@@ -8,35 +8,42 @@ import (
 )
 
 type info struct {
-	Name  string
-	Shift int
-	Pwd   string
-}
-type joke struct{
-	Value string 
+	Text  string
 }
 
 func main() {
 	app := fiber.New()
 	app.Get("/name", name)
-	app.Post("/api", post)
+	app.Post("/encode", encoding)
+	app.Post("/decode",decoding)
 	fmt.Println("server is running on port 5000")
 	app.Listen("127.0.0.1:5000")
 }
 func name(c *fiber.Ctx) error {
 	return c.SendString(c.Params("name"))
 }
-func post(c *fiber.Ctx) error {
+func encoding(c *fiber.Ctx) error {
 	data := new(info)
 	if err := c.BodyParser(data); err != nil {
 		log.Fatal(err)
 	}
-	encryptedText := cryptography.Encode(data.Name)
-	fmt.Println(encryptedText)
-	decryptedText,err := cryptography.Decode(encryptedText)
+	encryptedText,err := cryptography.Encode(data.Text)
+	if err!=nil{
+		panic("encoding failed")
+	}
+	data.Text=encryptedText
+	return c.JSON(data)
+}
+
+func decoding(c *fiber.Ctx) error{
+	data :=new(info)
+	if err:=c.BodyParser(data);err!=nil{
+		log.Fatal(err)
+	}
+	decryptedText,err := cryptography.Decode(data.Text)
 	if err!=nil{
 		panic("decoding failed")
 	}
-	fmt.Println(decryptedText)
-	return c.Send(c.Body())
+	data.Text=decryptedText
+	return c.JSON(data)
 }
